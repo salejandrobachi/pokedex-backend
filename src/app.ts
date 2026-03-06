@@ -9,10 +9,24 @@ import InmunidadRoutes from './routes/inmune.routes';
 
 const app = express();
 
-app.use(express.json());
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL, // tu frontend en Vercel
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000'
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+app.use(express.json());
 
 
 app.use('/api', regionRoutes);
