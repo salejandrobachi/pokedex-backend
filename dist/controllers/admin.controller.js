@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const user_services_1 = require("../services/user.services");
-require("../types/express");
 const userService = new user_services_1.UserService();
 class AdminController {
     listUsers(req, res) {
