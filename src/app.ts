@@ -8,6 +8,7 @@ import DebilidadesRoutes from './routes/debilidad.routes';
 import InmunidadRoutes from './routes/inmune.routes';
 import UserRoutes from './routes/user.routes';
 import AuthRoutes from './routes/auth.routes';
+import AdminRoutes from './routes/admin.routes';
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api', DebilidadesRoutes);
 app.use('/api', InmunidadRoutes);
 app.use('/api', UserRoutes);
 app.use('/api', AuthRoutes);
+app.use('/api', AdminRoutes);
 app.use('/ping', async (req, res) => {
     res.send('pong');
 });

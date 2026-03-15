@@ -1,0 +1,57 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AdminController = void 0;
+const user_services_1 = require("../services/user.services");
+require("../types/express");
+const userService = new user_services_1.UserService();
+class AdminController {
+    listUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield userService.getAllUsers();
+                res.json(users);
+            }
+            catch (error) {
+                console.error('Error listing users:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+    }
+    updateUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const { username, email, role } = req.body;
+            if (!username && !email && !role) {
+                res.status(400).json({ error: 'Debes proporcionar al menos username, email o role' });
+                return;
+            }
+            try {
+                const user = yield userService.adminUpdateUser(id, { username, email, role });
+                if (!user) {
+                    res.status(404).json({ error: 'Usuario no encontrado' });
+                    return;
+                }
+                res.json(user);
+            }
+            catch (error) {
+                if (error.code === '23505') {
+                    res.status(409).json({ error: 'El username o email ya está en uso por otro usuario' });
+                }
+                else {
+                    console.error('Error updating user (admin):', error);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                }
+            }
+        });
+    }
+}
+exports.AdminController = AdminController;

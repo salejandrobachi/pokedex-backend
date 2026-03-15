@@ -18,9 +18,11 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_services_1 = require("./user.services");
 const userService = new user_services_1.UserService();
 class AuthService {
-    login(email, password) {
+    login(login, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userService.getUserByEmail(email);
+            const user = login.includes('@')
+                ? yield userService.getUserByEmail(login)
+                : yield userService.getUserByUsername(login);
             if (!user) {
                 throw new Error('INVALID_CREDENTIALS');
             }

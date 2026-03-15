@@ -26,4 +26,55 @@ export class UserService {
     const { rows } = await pool.query<Omit<User, 'password_hash'>>(query, [id]);
     return rows[0] || null;
   }
+
+  async getUserByUsername(username: string): Promise<User | null> {
+    const query = 'SELECT * FROM users WHERE username = $1';
+    const { rows } = await pool.query<User>(query, [username]);
+    return rows[0] || null;
+  }
+
+  async updateUsername(id: string, username: string): Promise<Omit<User, 'password_hash'> | null> {
+    const query = `
+      UPDATE users SET username = $1
+      WHERE id = $2
+      RETURNING id, username, email, created_at, role
+    `;
+    const { rows } = await pool.query<Omit<User, 'password_hash'>>(query, [username, id]);
+    return rows[0] || null;
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const { rowCount } = await pool.query('DELETE FROM users WHERE id = $1', [id]);
+    return (rowCount ?? 0) > 0;
+  }
+
+  async getAllUsers(): Promise<Omit<User, 'password_hash'>[]> {
+    const query = 'SELECT id, username, email, created_at, role FROM users ORDER BY created_at DESC';
+    const { rows } = await pool.query<Omit<User, 'password_hash'>>(query);
+    return rows;
+  }
+
+  async adminUpdateUser(
+    id: string,
+    fields: { username?: string; email?: string; role?: string }
+  ): Promise<Omit<User, 'password_hash'> | null> {
+    const setClauses: string[] = [];
+    const values: unknown[] = [];
+    let idx = 1;
+
+    if (fields.username !== undefined) { setClauses.push(`username = $${idx++}`); values.push(fields.username); }
+    if (fields.email !== undefined)    { setClauses.push(`email = $${idx++}`);    values.push(fields.email); }
+    if (fields.role !== undefined)     { setClauses.push(`role = $${idx++}`);     values.push(fields.role); }
+
+    if (setClauses.length === 0) return null;
+
+    values.push(id);
+    const query = `
+      UPDATE users SET ${setClauses.join(', ')}
+      WHERE id = $${idx}
+      RETURNING id, username, email, created_at, role
+    `;
+    const { rows } = await pool.query<Omit<User, 'password_hash'>>(query, values);
+    return rows[0] || null;
+  }
 }

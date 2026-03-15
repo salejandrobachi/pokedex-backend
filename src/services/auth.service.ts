@@ -5,8 +5,10 @@ import { UserService } from './user.services';
 const userService = new UserService();
 
 export class AuthService {
-  async login(email: string, password: string): Promise<{ token: string; user: object }> {
-    const user = await userService.getUserByEmail(email);
+  async login(login: string, password: string): Promise<{ token: string; user: object }> {
+    const user = login.includes('@')
+      ? await userService.getUserByEmail(login)
+      : await userService.getUserByUsername(login);
 
     if (!user) {
       throw new Error('INVALID_CREDENTIALS');

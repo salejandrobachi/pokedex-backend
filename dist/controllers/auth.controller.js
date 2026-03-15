@@ -15,13 +15,14 @@ const authService = new auth_service_1.AuthService();
 class AuthController {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = req.body;
-            if (!email || !password) {
-                res.status(400).json({ error: 'Email y password son requeridos' });
+            const { login, email, password } = req.body;
+            const loginValue = login !== null && login !== void 0 ? login : email;
+            if (!loginValue || !password) {
+                res.status(400).json({ error: 'login (email o username) y password son requeridos' });
                 return;
             }
             try {
-                const result = yield authService.login(email, password);
+                const result = yield authService.login(loginValue, password);
                 res.status(200).json(result);
             }
             catch (error) {

@@ -42,5 +42,65 @@ class UserService {
             return rows[0] || null;
         });
     }
+    getUserByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM users WHERE username = $1';
+            const { rows } = yield database_1.default.query(query, [username]);
+            return rows[0] || null;
+        });
+    }
+    updateUsername(id, username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+      UPDATE users SET username = $1
+      WHERE id = $2
+      RETURNING id, username, email, created_at, role
+    `;
+            const { rows } = yield database_1.default.query(query, [username, id]);
+            return rows[0] || null;
+        });
+    }
+    deleteUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rowCount } = yield database_1.default.query('DELETE FROM users WHERE id = $1', [id]);
+            return (rowCount !== null && rowCount !== void 0 ? rowCount : 0) > 0;
+        });
+    }
+    getAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT id, username, email, created_at, role FROM users ORDER BY created_at DESC';
+            const { rows } = yield database_1.default.query(query);
+            return rows;
+        });
+    }
+    adminUpdateUser(id, fields) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const setClauses = [];
+            const values = [];
+            let idx = 1;
+            if (fields.username !== undefined) {
+                setClauses.push(`username = $${idx++}`);
+                values.push(fields.username);
+            }
+            if (fields.email !== undefined) {
+                setClauses.push(`email = $${idx++}`);
+                values.push(fields.email);
+            }
+            if (fields.role !== undefined) {
+                setClauses.push(`role = $${idx++}`);
+                values.push(fields.role);
+            }
+            if (setClauses.length === 0)
+                return null;
+            values.push(id);
+            const query = `
+      UPDATE users SET ${setClauses.join(', ')}
+      WHERE id = $${idx}
+      RETURNING id, username, email, created_at, role
+    `;
+            const { rows } = yield database_1.default.query(query, values);
+            return rows[0] || null;
+        });
+    }
 }
 exports.UserService = UserService;

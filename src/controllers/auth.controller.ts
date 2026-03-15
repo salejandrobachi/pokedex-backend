@@ -5,15 +5,16 @@ const authService = new AuthService();
 
 export class AuthController {
   async login(req: Request, res: Response): Promise<void> {
-    const { email, password } = req.body;
+    const { login, email, password } = req.body;
+    const loginValue = login ?? email;
 
-    if (!email || !password) {
-      res.status(400).json({ error: 'Email y password son requeridos' });
+    if (!loginValue || !password) {
+      res.status(400).json({ error: 'login (email o username) y password son requeridos' });
       return;
     }
 
     try {
-      const result = await authService.login(email, password);
+      const result = await authService.login(loginValue, password);
       res.status(200).json(result);
     } catch (error: any) {
       if (error.message === 'INVALID_CREDENTIALS') {

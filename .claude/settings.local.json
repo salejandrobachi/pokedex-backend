@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"C:\\\\Users\\\\USUARIO\\\\Desktop\\\\Programacion\\\\react\\\\datos\\\\pokedex api\" && npm install bcryptjs && npm install --save-dev @types/bcryptjs)"
+      "Bash(cd \"C:\\\\Users\\\\USUARIO\\\\Desktop\\\\Programacion\\\\react\\\\datos\\\\pokedex api\" && npm install bcryptjs && npm install --save-dev @types/bcryptjs)",
+      "Bash(cd:*)"
     ]
   }
 }
