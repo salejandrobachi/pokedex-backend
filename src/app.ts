@@ -6,6 +6,8 @@ import pokemonRoutes from './routes/pokemon.routes';
 import ResistenciaRoutes from './routes/resistencia.routes';
 import DebilidadesRoutes from './routes/debilidad.routes';
 import InmunidadRoutes from './routes/inmune.routes';
+import UserRoutes from './routes/user.routes';
+import AuthRoutes from './routes/auth.routes';
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use('/api', pokemonRoutes);
 app.use('/api', ResistenciaRoutes);
 app.use('/api', DebilidadesRoutes);
 app.use('/api', InmunidadRoutes);
+app.use('/api', UserRoutes);
+app.use('/api', AuthRoutes);
 app.use('/ping', async (req, res) => {
     res.send('pong');
 });
