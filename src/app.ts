@@ -9,6 +9,8 @@ import InmunidadRoutes from './routes/inmune.routes';
 import UserRoutes from './routes/user.routes';
 import AuthRoutes from './routes/auth.routes';
 import AdminRoutes from './routes/admin.routes';
+import FavoritesRoutes from './routes/favorites.routes';
+import TeamRoutes from './routes/team.routes';
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use('/api', InmunidadRoutes);
 app.use('/api', UserRoutes);
 app.use('/api', AuthRoutes);
 app.use('/api', AdminRoutes);
+app.use('/api', FavoritesRoutes);
+app.use('/api', TeamRoutes);
 app.use('/ping', async (req, res) => {
     res.send('pong');
 });
