@@ -30,7 +30,7 @@ class AuthService {
             if (!valid) {
                 throw new Error('INVALID_CREDENTIALS');
             }
-            const token = jsonwebtoken_1.default.sign({ id: user.id, username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+            const token = jsonwebtoken_1.default.sign({ id: user.id, username: user.username, role: user.role, created_at: user.created_at }, process.env.JWT_SECRET, { expiresIn: '7d' });
             return {
                 token,
                 user: {

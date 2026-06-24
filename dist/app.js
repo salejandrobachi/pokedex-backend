@@ -23,6 +23,8 @@ const inmune_routes_1 = __importDefault(require("./routes/inmune.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
+const favorites_routes_1 = __importDefault(require("./routes/favorites.routes"));
+const team_routes_1 = __importDefault(require("./routes/team.routes"));
 const app = (0, express_1.default)();
 const allowedOrigins = [
     'http://localhost:3000',
@@ -50,6 +52,8 @@ app.use('/api', inmune_routes_1.default);
 app.use('/api', user_routes_1.default);
 app.use('/api', auth_routes_1.default);
 app.use('/api', admin_routes_1.default);
+app.use('/api', favorites_routes_1.default);
+app.use('/api', team_routes_1.default);
 app.use('/ping', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send('pong');
 }));
