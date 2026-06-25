@@ -6,9 +6,7 @@ import { adminMiddleware } from '../middlewares/admin.middleware';
 const router = express.Router();
 const adminController = new AdminController();
 
-router.use(authMiddleware, adminMiddleware);
-
-router.get('/admin/users', adminController.listUsers.bind(adminController));
-router.put('/admin/users/:id', adminController.updateUser.bind(adminController));
+router.get('/admin/users', authMiddleware, adminMiddleware, adminController.listUsers.bind(adminController));
+router.put('/admin/users/:id', authMiddleware, adminMiddleware, adminController.updateUser.bind(adminController));
 
 export default router;
